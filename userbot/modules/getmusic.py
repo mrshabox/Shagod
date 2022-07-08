@@ -7,7 +7,6 @@ import os
 import shutil
 import time
 
-import deezloader
 from hachoir.metadata import extractMetadata
 from hachoir.parser import createParser
 from pylast import User
@@ -283,109 +282,6 @@ async def _(event):
         )
 
 
-@man_cmd(pattern="deez (.+?|) (FLAC|MP3\_320|MP3\_256|MP3\_128)")
-async def _(event):
-    """DeezLoader by @An0nimia. Ported for UniBorg by @SpEcHlDe"""
-    if event.fwd_from:
-        return
-
-    strings = {
-        "name": "DeezLoad",
-        "arl_token_cfg_doc": "Token ARL untuk Deezer",
-        "invalid_arl_token": "Harap setel variabel yang diperlukan untuk modul ini",
-        "wrong_cmd_syntax": "Bruh, sekarang saya pikir seberapa jauh kita harus melangkah. tolong hentikan Sesi saya ð¥º",
-        "server_error": "Mengalami kesalahan teknis.",
-        "processing": "`Sedang Mendownload....`",
-        "uploading": "`Mengunggah.....`",
-    }
-
-    ARL_TOKEN = DEEZER_ARL_TOKEN
-
-    if ARL_TOKEN is None:
-        await event.edit(strings["invalid_arl_token"])
-        return
-
-    try:
-        loader = deezloader.Login(ARL_TOKEN)
-    except Exception as er:
-        await event.edit(str(er))
-        return
-
-    temp_dl_path = os.path.join(TEMP_DOWNLOAD_DIRECTORY, str(time.time()))
-    if not os.path.exists(temp_dl_path):
-        os.makedirs(temp_dl_path)
-
-    required_link = event.pattern_match.group(1)
-    required_qty = event.pattern_match.group(2)
-
-    await event.edit(strings["processing"])
-
-    if "spotify" in required_link:
-        if "track" in required_link:
-            required_track = loader.download_trackspo(
-                required_link,
-                output=temp_dl_path,
-                quality=required_qty,
-                recursive_quality=True,
-                recursive_download=True,
-                not_interface=True,
-            )
-            await event.edit(strings["uploading"])
-            await upload_track(required_track, event)
-            shutil.rmtree(temp_dl_path)
-            await event.delete()
-
-        elif "album" in required_link:
-            reqd_albums = loader.download_albumspo(
-                required_link,
-                output=temp_dl_path,
-                quality=required_qty,
-                recursive_quality=True,
-                recursive_download=True,
-                not_interface=True,
-                zips=False,
-            )
-            await event.edit(strings["uploading"])
-            for required_track in reqd_albums:
-                await upload_track(required_track, event)
-            shutil.rmtree(temp_dl_path)
-            await event.delete()
-
-    elif "deezer" in required_link:
-        if "track" in required_link:
-            required_track = loader.download_trackdee(
-                required_link,
-                output=temp_dl_path,
-                quality=required_qty,
-                recursive_quality=True,
-                recursive_download=True,
-                not_interface=True,
-            )
-            await event.edit(strings["uploading"])
-            await upload_track(required_track, event)
-            shutil.rmtree(temp_dl_path)
-            await event.delete()
-
-        elif "album" in required_link:
-            reqd_albums = loader.download_albumdee(
-                required_link,
-                output=temp_dl_path,
-                quality=required_qty,
-                recursive_quality=True,
-                recursive_download=True,
-                not_interface=True,
-                zips=False,
-            )
-            await event.edit(strings["uploading"])
-            for required_track in reqd_albums:
-                await upload_track(required_track, event)
-            shutil.rmtree(temp_dl_path)
-            await event.delete()
-
-    else:
-        await event.edit(strings["wrong_cmd_syntax"])
-
-
 async def upload_track(track_location, message):
     metadata = extractMetadata(createParser(track_location))
     duration = metadata.get("duration").seconds if metadata.has("duration") else 0
@@ -438,9 +334,6 @@ CMD_HELP.update(
         \n  •  **Function : **Unduh penggunaan scrobble LastFM saat ini dari bot @WooMaiBot\
         \n\n  •  **Syntax :** `{cmd}mhb` <Link Spotify/Deezer>\
         \n  •  **Function : **Mendowload lagu dari Spotify atau Deezer dari bot @MusicsHunterBot\
-        \n\n  •  **Syntax :** `{cmd}deez` <link spotify/deezer> FORMAT\
-        \n  •  **Function : **Mendowload lagu dari deezer atau spotify.\
-        \n  •  **Format   : ** `FLAC`, `MP3_320`, `MP3_256`, `MP3_128`.\
     "
     }
 )
