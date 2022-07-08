@@ -275,45 +275,6 @@ async def _(event):
         )
 
 
-async def upload_track(track_location, message):
-    metadata = extractMetadata(createParser(track_location))
-    duration = metadata.get("duration").seconds if metadata.has("duration") else 0
-    title = metadata.get("title") if metadata.has("title") else ""
-    performer = metadata.get("artist") if metadata.has("artist") else ""
-    document_attributes = [
-        DocumentAttributeAudio(
-            duration=duration,
-            voice=False,
-            title=title,
-            performer=performer,
-            waveform=None,
-        )
-    ]
-    supports_streaming = True
-    force_document = False
-    caption_rts = os.path.basename(track_location)
-    c_time = time.time()
-    with open(track_location, "rb") as f:
-        result = await upload_file(
-            client=message.client,
-            file=f,
-            name=track_location,
-            progress_callback=lambda d, t: asyncio.get_event_loop().create_task(
-                progress(d, t, message, c_time, "[UPLOAD]", track_location)
-            ),
-        )
-    await message.client.send_file(
-        message.chat_id,
-        result,
-        caption=caption_rts,
-        force_document=force_document,
-        supports_streaming=supports_streaming,
-        allow_cache=False,
-        attributes=document_attributes,
-    )
-    os.remove(track_location)
-
-
 CMD_HELP.update(
     {
         "getmusic": f"**Plugin : **`getmusic`\
