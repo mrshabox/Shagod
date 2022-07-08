@@ -4,7 +4,6 @@
 import asyncio
 import glob
 import os
-import shutil
 import time
 
 from hachoir.metadata import extractMetadata
@@ -15,13 +14,7 @@ from telethon.errors.rpcerrorlist import YouBlockedUserError
 from telethon.tl.types import DocumentAttributeAudio, DocumentAttributeVideo
 
 from userbot import CMD_HANDLER as cmd
-from userbot import (
-    CMD_HELP,
-    DEEZER_ARL_TOKEN,
-    LASTFM_USERNAME,
-    TEMP_DOWNLOAD_DIRECTORY,
-    lastfm,
-)
+from userbot import CMD_HELP, LASTFM_USERNAME, lastfm
 from userbot.utils import bash, chrome, edit_or_reply, man_cmd, progress
 from userbot.utils.FastTelethon import upload_file
 
