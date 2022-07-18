@@ -113,16 +113,16 @@ async def ANTI_SPAMBOTS(welcm):
                     elif (
                         check_user.first_name
                         in (
-                            "Bitmex",
-                            "Promotion",
-                            "Information",
-                            "Dex",
-                            "Announcements",
-                            "Info",
+                            "Admin",
+                            "Nhấp vào bio",
+                            "Tâm sự ib",
+                            "Call",
+                            "Show",
+                            "Loli",
                         )
                         and users.last_name == "Bot"
                     ):
-                        reason = "Known spambot"
+                        reason = "spambot"
                         spambot = True
 
                     if spambot:
@@ -141,9 +141,9 @@ async def ANTI_SPAMBOTS(welcm):
 
                         await welcm.reply(
                             r"\\**#Antispambot_Detector**//"
-                            f"\n\n**First Name:** [{check_user.first_name}](tg://user?id={check_user.id})"
+                            f"\n\n**Tên:** [{check_user.first_name}](tg://user?id={check_user.id})"
                             f"**User ID:** `{check_user.id}`\n"
-                            f"**Reason:** {reason}\n"
+                            f"**Lý do:** {reason}\n"
                         )
 
                         await welcm.client.kick_participant(
@@ -155,14 +155,14 @@ async def ANTI_SPAMBOTS(welcm):
                     except BaseException:
                         if ANTI_SPAMBOT_SHOUT:
                             await welcm.reply(
-                                f"**Alert!** [{check_user.first_name}](tg://user?id={check_user.id}) is a known spammer and is {reason}.\n**Banned is strongly recommended.**"
+                                f"**Cảnh báo!!!!** [{check_user.first_name}](tg://user?id={check_user.id}) là một người gửi thư rác đã biết và là {reason}.\n**Bị cấm rất được khuyến khích .**"
                             )
                             kicked = False
                             reported = True
 
                 elif ANTI_SPAMBOT_SHOUT:
                     await welcm.reply(
-                        f"**Alert!** [{check_user.first_name}](tg://user?id={check_user.id}) is a known spammer and is {reason}.\n**Ban is strongly recommended.**"
+                        f"**Cảnh báo!** [{check_user.first_name}](tg://user?id={check_user.id}) là một người gửi thư rác đã biết và là {reason}.\n**Ban is strongly recommended.**"
                     )
                     kicked = False
                     reported = True
