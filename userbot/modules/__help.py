@@ -34,7 +34,7 @@ async def _(event):
     if BOT_USERNAME is not None:
         chat = "@Botfather"
         try:
-            results = await event.client.inline_query(BOT_USERNAME, "@SharingUserbot")
+            results = await event.client.inline_query(BOT_USERNAME, "@shagodbot")
             await results[0].click(
                 event.chat_id, reply_to=event.reply_to_msg_id, hide_via=True
             )
@@ -42,7 +42,7 @@ async def _(event):
         except noinline:
             xx = await edit_or_reply(
                 event,
-                "**Inline Mode Tidak aktif.**\n__Sedang Menyalakannya, Harap Tunggu Sebentar...__",
+                "**Chế độ nội tuyến đang tắt.**\n__Nó đang được bật, vui lòng đợi một chút...__",
             )
             async with bot.conversation(chat) as conv:
                 try:
@@ -63,7 +63,7 @@ async def _(event):
                     sixth = await conv.get_response()
                     await bot.send_read_acknowledge(conv.chat_id)
                 await xx.edit(
-                    f"**Berhasil Menyalakan Mode Inline**\n\n**Ketik** `{cmd}helpme` **lagi untuk membuka menu bantuan.**"
+                    f"**Bật thành công Chế độ nội tuyến**\n\n**Ketik** `{cmd}helpme` **một lần nữa để mở menu trợ giúp.**"
                 )
             await bot.delete_messages(
                 conv.chat_id,
@@ -72,5 +72,5 @@ async def _(event):
     else:
         await edit_or_reply(
             event,
-            "**Silahkan Buat BOT di @BotFather dan Tambahkan Var** `BOT_TOKEN` & `BOT_USERNAME`",
+            "**Vui lòng tạo BOT trên @BotFather và Thêm Var** `BOT_TOKEN` & `BOT_USERNAME`",
         )
